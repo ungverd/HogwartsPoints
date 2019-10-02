@@ -99,7 +99,7 @@ e_minus = []
 
 window.bind('<Return>', after_enter)
 
-lbl = Label(text="Задать новое количество баллов")
+lbl = Label(text="Задать новое количество баллов (нажмите Enter для ввода)")
 lbl.grid(row=2, column=0, columnspan=8)
 
 lbl = Label(text="Добавить баллы")
