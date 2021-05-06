@@ -5,9 +5,9 @@ from typing import Optional, List
 """
 Use this module to communicate with Ostranna USB Host (Usb2radio)
 *get_port_list() function returns list of available comports as ['COM3', 'COM5', 'COM20' ...]
-*get_device_port function returns first found port with Ostranna device (answer 'Ack 0' to 'Ping\r\n') as 'COM4'
+*get_device_port function returns first found port with Ostranna device (answer 'Ok' to 'Ping\r\n') as 'COM4'
 *get_all_device_ports() returns list of comports with Ostranna devices connected 
-                        (answer 'Ack 0' to 'Ping\r\n') as ['COM4', ...]
+                        (answer 'Ok' to 'Ping\r\n') as ['COM4', ...]
 *open_port(port_id: str) takes comport as str parameter (open_port('COM4') and returns open port or None
 *send command(ser, command, parameters) send command with parameters to ser port, returns send status
               ("ok", "Bad data", "Unknown command" or "No device port") 
@@ -38,7 +38,7 @@ def get_device_port() -> Optional[str]:
             ser.write(command)
             answer: str = ser.readall().decode('utf-8')
             ser.close()
-            if 'Ack 0' in answer:
+            if 'Ok' in answer:
                 return comport
         except serial.SerialException:
             continue
@@ -60,7 +60,7 @@ def get_all_device_ports() -> List[str]:
             ser.write(command)
             answer: str = ser.readall().decode('utf-8')
             ser.close()
-            if 'Ack 0' in answer:
+            if 'Ok' in answer:
                 result.append(comport)
         except serial.SerialException:
             continue
@@ -117,7 +117,7 @@ def send_command(ser, command: str, *parameters) -> str:
             else bytes(create_command(command), encoding='utf-8')
         ser.write(command)
         answer: str = ser.readall().decode('utf-8')
-        if answer.strip().lower() == 'ack 0':
+        if answer.strip().lower() == 'ok':
             return 'Ok'
         elif answer.strip().lower() == 'ack 6':
             return 'Unknown command'
